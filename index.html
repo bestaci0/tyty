@@ -1,0 +1,7551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victoria Bakery POS</title>
+
+<style>
+:root{
+    --wine:#8e294e;
+    --wine-dark:#6f1f3b;
+    --wine-light:#f8e7ed;
+    --cream:#fbf8f1;
+    --cream2:#f4eee2;
+    --white:#ffffff;
+    --text:#30272a;
+    --muted:#7d7074;
+    --green:#4c8060;
+    --green-light:#e7f1e8;
+    --yellow:#b18427;
+    --yellow-light:#f7efd6;
+    --red:#a94452;
+    --red-light:#f8e5e7;
+    --border:#e6ddd5;
+    --shadow:0 4px 18px rgba(72,35,45,.07);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:#eeeae5;
+    color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
+    height:68px;
+    background:var(--white);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-logo{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--wine);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Georgia,serif;
+    font-weight:bold;
+}
+
+.brand-name{
+    font-family:Georgia,serif;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.brand-sub{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:2px;
+}
+
+.nav{
+    display:flex;
+    gap:4px;
+    height:100%;
+    align-items:center;
+}
+
+.nav button{
+    height:100%;
+    border:0;
+    background:transparent;
+    padding:0 13px;
+    color:#766a6d;
+    font-size:12px;
+}
+
+.nav button:hover,
+.nav button.active{
+    color:var(--wine);
+    border-bottom:2px solid var(--wine);
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+}
+
+.small-btn{
+    border:1px solid var(--border);
+    background:white;
+    padding:8px 12px;
+    border-radius:7px;
+    font-size:11px;
+}
+
+.small-btn.primary{
+    background:var(--wine);
+    color:white;
+    border-color:var(--wine);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    max-width:1500px;
+    margin:auto;
+    padding:28px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-header{
+    margin-bottom:20px;
+}
+
+.eyebrow{
+    color:var(--wine);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:10px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.page-title{
+    font-family:Georgia,serif;
+    font-size:31px;
+    font-weight:500;
+}
+
+.page-description{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:7px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+    border:0;
+    padding:11px 16px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:var(--wine);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--wine-dark);
+}
+
+.btn-outline{
+    background:white;
+    border:1px solid var(--border);
+    color:var(--text);
+}
+
+.btn-danger{
+    background:var(--red);
+    color:white;
+}
+
+.btn-green{
+    background:var(--green);
+    color:white;
+}
+
+/* =========================
+   CUSTOMER MENU
+========================= */
+
+.menu-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 330px;
+    gap:18px;
+}
+
+.menu-main{
+    min-width:0;
+}
+
+.hero{
+    background:var(--cream);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:18px;
+}
+
+.hero img{
+    width:100%;
+    height:310px;
+    object-fit:cover;
+    display:block;
+}
+
+.hero-content{
+    padding:22px 25px;
+}
+
+.hero h1{
+    font-family:Georgia,serif;
+    font-size:28px;
+    font-weight:500;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:6px;
+}
+
+.section-title{
+    font-family:Georgia,serif;
+    font-size:18px;
+    margin:22px 0 12px;
+}
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.product-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    overflow:hidden;
+    transition:.2s;
+}
+
+.product-card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow);
+}
+
+.product-photo{
+    height:150px;
+    background:var(--cream2);
+    overflow:hidden;
+}
+
+.product-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.product-info{
+    padding:13px;
+}
+
+.product-name{
+    font-family:Georgia,serif;
+    font-size:15px;
+}
+
+.product-description{
+    color:var(--muted);
+    font-size:10px;
+    min-height:30px;
+    margin-top:4px;
+}
+
+.product-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+}
+
+.price{
+    color:var(--wine);
+    font-weight:bold;
+}
+
+.add-btn{
+    border:0;
+    background:var(--wine);
+    color:white;
+    border-radius:5px;
+    padding:7px 11px;
+    font-size:10px;
+}
+
+/* BOXES */
+
+.box-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.box-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:17px;
+}
+
+.box-card h3{
+    font-family:Georgia,serif;
+    font-size:15px;
+}
+
+.box-price{
+    color:var(--wine);
+    font-size:17px;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+.box-card p{
+    font-size:10px;
+    color:var(--muted);
+}
+
+/* SETS */
+
+.set-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.set-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:17px;
+}
+
+.set-header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.set-name{
+    background:#f5d9df;
+    color:var(--wine);
+    padding:4px 10px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:11px;
+}
+
+.set-card ul{
+    list-style:none;
+    margin-top:10px;
+}
+
+.set-card li{
+    font-size:11px;
+    margin:4px 0;
+}
+
+/* =========================
+   CART
+========================= */
+
+.cart{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:18px;
+    position:sticky;
+    top:85px;
+    height:max-content;
+}
+
+.cart h2{
+    font-family:Georgia,serif;
+    font-size:19px;
+    font-weight:500;
+}
+
+.cart-sub{
+    font-size:10px;
+    color:var(--muted);
+    margin:5px 0 14px;
+}
+
+.cart-item{
+    padding:11px 0;
+    border-bottom:1px solid #eee6df;
+}
+
+.cart-item-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.cart-item-name{
+    font-weight:600;
+}
+
+.cart-controls{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:7px;
+}
+
+.qty-btn{
+    width:23px;
+    height:23px;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:4px;
+}
+
+.remove-btn{
+    margin-left:auto;
+    border:0;
+    background:none;
+    color:var(--red);
+    font-size:10px;
+}
+
+.cart-total{
+    margin-top:15px;
+    padding-top:15px;
+    border-top:2px solid var(--border);
+}
+
+.total-row{
+    display:flex;
+    justify-content:space-between;
+    margin:6px 0;
+    font-size:12px;
+}
+
+.grand-total{
+    color:var(--wine);
+    font-size:21px;
+    font-weight:bold;
+}
+
+.cart .btn{
+    width:100%;
+    margin-top:12px;
+}
+
+/* =========================
+   CHECKOUT
+========================= */
+
+.checkout-layout{
+    display:grid;
+    grid-template-columns:1fr 350px;
+    gap:18px;
+}
+
+.panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:16px;
+}
+
+.panel-title{
+    font-family:Georgia,serif;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    font-size:10px;
+    color:#685c60;
+    font-weight:600;
+}
+
+.field input,
+.field select,
+.field textarea{
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:10px;
+    outline:none;
+    font-size:12px;
+    background:#fffdfa;
+}
+
+.field textarea{
+    min-height:75px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:var(--wine);
+}
+
+.choice-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+}
+
+.choice{
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.choice.active{
+    border-color:var(--wine);
+    background:var(--wine-light);
+}
+
+.choice strong{
+    display:block;
+    font-size:11px;
+}
+
+.choice span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+/* =========================
+   TRACK
+========================= */
+
+.track-search{
+    display:flex;
+    gap:8px;
+    max-width:650px;
+}
+
+.track-search input{
+    flex:1;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:7px;
+}
+
+.track-card{
+    margin-top:20px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px;
+}
+
+.track-header{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    padding-bottom:15px;
+}
+
+.status-pill{
+    border-radius:20px;
+    padding:5px 9px;
+    background:var(--yellow-light);
+    color:var(--yellow);
+    font-size:10px;
+}
+
+.timeline{
+    margin:25px 0;
+}
+
+.timeline-item{
+    display:flex;
+    gap:15px;
+    min-height:58px;
+}
+
+.timeline-dot{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    border:2px solid #d6cfd0;
+    background:white;
+    position:relative;
+    flex-shrink:0;
+}
+
+.timeline-item:not(:last-child) .timeline-dot:after{
+    content:"";
+    position:absolute;
+    top:18px;
+    left:7px;
+    width:2px;
+    height:42px;
+    background:#ddd5d7;
+}
+
+.timeline-item.completed .timeline-dot{
+    border-color:var(--green);
+    background:var(--green);
+}
+
+.timeline-item.current .timeline-dot{
+    border-color:var(--wine);
+    background:var(--wine);
+}
+
+.timeline-content strong{
+    font-size:12px;
+}
+
+.timeline-content p{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* =========================
+   ADMIN DASHBOARD
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.stat{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:16px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.stat-value{
+    font-size:23px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.stat-value.wine{
+    color:var(--wine);
+}
+
+.stat-value.green{
+    color:var(--green);
+}
+
+.table-panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.table-header{
+    padding:17px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.table-title{
+    font-family:Georgia,serif;
+    font-size:17px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:11px;
+}
+
+th{
+    text-align:left;
+    background:#faf7f1;
+    color:#756a6d;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    padding:11px 14px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:12px 14px;
+    border-bottom:1px solid #eee8e3;
+}
+
+tr:hover td{
+    background:#fffcf7;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:12px;
+    font-size:9px;
+}
+
+.badge.green{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+.badge.yellow{
+    background:var(--yellow-light);
+    color:var(--yellow);
+}
+
+.badge.red{
+    background:var(--red-light);
+    color:var(--red);
+}
+
+.badge.purple{
+    background:var(--wine-light);
+    color:var(--wine);
+}
+
+/* =========================
+   COSTS
+========================= */
+
+.cost-layout{
+    display:grid;
+    grid-template-columns:1fr 330px;
+    gap:18px;
+}
+
+.cost-table{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+}
+
+.expense-form{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    height:max-content;
+}
+
+.expense-form .field{
+    margin-bottom:12px;
+}
+
+.expense-list{
+    margin-top:18px;
+}
+
+.expense-row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:11px;
+}
+
+/* =========================
+   IMAGE SECTION
+========================= */
+
+.reference-gallery{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:12px;
+}
+
+.reference-gallery img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    border-radius:9px;
+    border:1px solid var(--border);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#30272a;
+    color:white;
+    padding:13px 17px;
+    border-radius:8px;
+    font-size:11px;
+    opacity:0;
+    transform:translateY(15px);
+    pointer-events:none;
+    transition:.3s;
+    z-index:500;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+    .nav button{
+        padding:0 7px;
+        font-size:10px;
+    }
+
+    .menu-layout,
+    .checkout-layout,
+    .cost-layout{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        position:static;
+    }
+
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:750px){
+
+    .topbar{
+        height:auto;
+        padding:12px;
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    .nav{
+        order:3;
+        width:100%;
+        overflow-x:auto;
+        height:45px;
+    }
+
+    .nav button{
+        white-space:nowrap;
+    }
+
+    .main{
+        padding:15px;
+    }
+
+    .product-grid,
+    .box-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .set-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .reference-gallery{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-logo">V</div>
+
+        <div>
+            <div class="brand-name">Victoria Bakery</div>
+            <div class="brand-sub">BAGUIO • CREAM PUFFS</div>
+        </div>
+    </div>
+
+    <nav class="nav">
+
+        <button class="nav-btn active" data-page="menu">
+            Customer Order
+        </button>
+
+        <button class="nav-btn" data-page="checkout">
+            Checkout
+        </button>
+
+        <button class="nav-btn" data-page="track">
+            Track Order
+        </button>
+
+        <button class="nav-btn" data-page="orders">
+            Orders & Payments
+        </button>
+
+        <button class="nav-btn" data-page="sales">
+            Sales & Profit
+        </button>
+
+        <button class="nav-btn" data-page="costs">
+            Costs & Expenses
+        </button>
+
+    </nav>
+
+    <div class="header-actions">
+        <button class="small-btn" onclick="showReference()">
+            View Menu
+        </button>
+
+        <button class="small-btn primary" onclick="goTo('menu')">
+            New Order
+        </button>
+    </div>
+
+</header>
+
+
+<main class="main">
+
+<!-- =====================================================
+     CUSTOMER MENU
+===================================================== -->
+
+<section id="menu" class="page active">
+
+    <div class="page-header">
+        <div class="eyebrow">Victoria Bakery • Customer Ordering</div>
+
+        <h1 class="page-title">
+            A little box of happiness.
+        </h1>
+
+        <p class="page-description">
+            Choose your cream puffs, build your box, and place your order.
+        </p>
+    </div>
+
+
+    <div class="menu-layout">
+
+        <div class="menu-main">
+
+            <div class="hero">
+
+                <img src="assets/menu.jpg"
+                     alt="Victoria Bakery Cream Puff Menu"
+                     onerror="this.style.display='none'">
+
+                <div class="hero-content">
+
+                    <h1>
+                        Deliciously Soft, Perfectly Filled.
+                    </h1>
+
+                    <p>
+                        Handcrafted cream puffs with a variety of flavors,
+                        made with love in Baguio.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Cream Puff Flavors
+            </h2>
+
+
+            <div class="product-grid" id="products"></div>
+
+
+            <h2 class="section-title">
+                Box Options
+            </h2>
+
+
+            <div class="box-grid">
+
+                <div class="box-card">
+
+                    <h3>Box of 8</h3>
+
+                    <div class="box-price">
+                        ₱215
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 8',215)">
+                        Add
+                    </button>
+
+                </div>
+
+
+                <div class="box-card">
+
+                    <h3>Box of 12</h3>
+
+                    <div class="box-price">
+                        ₱320
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 12',320)">
+                        Add
+                    </button>
+
+                </div>
+
+
+                <div class="box-card">
+
+                    <h3>Box of 20</h3>
+
+                    <div class="box-price">
+                        ₱525
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 20',525)">
+                        Add
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Assorted Cream Puff Sets
+            </h2>
+
+
+            <div class="set-grid">
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET A</span>
+                        <strong>₱250</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>1 Ube</li>
+                        <li>1 Matcha</li>
+                        <li>1 Cookies & Cream</li>
+                        <li>1 Strawberry</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set A',250)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET B</span>
+                        <strong>₱245</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set B',245)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET C</span>
+                        <strong>₱360</strong>
+                    </div>
+
+                    <ul>
+                        <li>4 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                        <li>2 Cookies & Cream</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set C',360)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET D</span>
+                        <strong>₱380</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                        <li>2 Cookies & Cream</li>
+                        <li>2 Strawberry</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set D',380)">
+                        Add Set
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Pasabuy & Store Information
+            </h2>
+
+
+            <div class="reference-gallery">
+
+                <img src="assets/pasabuy.jpg"
+                     alt="Pasabuy Information">
+
+                <img src="assets/products.jpg"
+                     alt="Victoria Bakery Products">
+
+            </div>
+
+        </div>
+
+
+        <!-- CART -->
+
+        <aside class="cart">
+
+            <h2>Your box of joy</h2>
+
+            <div class="cart-sub">
+                Review your selections before checkout.
+            </div>
+
+            <div id="cartItems">
+
+                <div style="
+                    text-align:center;
+                    padding:30px 10px;
+                    color:#8b7e82;
+                    font-size:11px;
+                ">
+                    Your order is empty.
+                </div>
+
+            </div>
+
+
+            <div class="cart-total">
+
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Pasabuy fee</span>
+                    <strong id="pasabuyFee">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Delivery</span>
+                    <strong id="deliveryFee">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Grand total</span>
+                    <strong class="grand-total" id="grandTotal">
+                        ₱0
+                    </strong>
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary"
+                    onclick="goTo('checkout')">
+                Continue to Checkout
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="clearCart()">
+                Clear Order
+            </button>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CHECKOUT
+===================================================== -->
+
+<section id="checkout" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Customer Details & Checkout
+        </div>
+
+        <h1 class="page-title">
+            The sweetest final details.
+        </h1>
+
+        <p class="page-description">
+            Tell us where to send your order and how you would like to receive it.
+        </p>
+
+    </div>
+
+
+    <div class="checkout-layout">
+
+        <div>
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    01 — Your details
+                </h2>
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label>
+                            Customer name
+                        </label>
+
+                        <input id="customerName"
+                               type="text"
+                               placeholder="Juan Dela Cruz">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Contact number
+                        </label>
+
+                        <input id="customerPhone"
+                               type="text"
+                               placeholder="09XX XXX XXXX">
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            Address
+                        </label>
+
+                        <input id="customerAddress"
+                               type="text"
+                               placeholder="Complete address">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Pickup location
+                        </label>
+
+                        <select id="pickupLocation">
+
+                            <option>
+                                WalterMart Paniqui
+                            </option>
+
+                            <option>
+                                Nancamarinan
+                            </option>
+
+                            <option>
+                                Ramos 7/11
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Order date
+                        </label>
+
+                        <input id="orderDate"
+                               type="date">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    02 — How would you like your order?
+                </h2>
+
+                <div class="choice-grid">
+
+                    <div class="choice active"
+                         id="pickupChoice"
+                         onclick="setFulfillment('Pickup')">
+
+                        <strong>
+                            Pickup
+                        </strong>
+
+                        <span>
+                            Meet us at the selected location.
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         id="deliveryChoice"
+                         onclick="setFulfillment('Delivery')">
+
+                        <strong>
+                            Delivery
+                        </strong>
+
+                        <span>
+                            Delivery starts at ₱30.
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         id="meetupChoice"
+                         onclick="setFulfillment('Meetup')">
+
+                        <strong>
+                            Meetup
+                        </strong>
+
+                        <span>
+                            Arrange a meetup location.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin-top:15px;
+                    background:#edf4e9;
+                    border-radius:7px;
+                    padding:12px;
+                    font-size:10px;
+                    color:#47664d;
+                ">
+                    Free delivery applies to a minimum box of 20.
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    03 — Payment
+                </h2>
+
+                <div class="choice-grid">
+
+                    <div class="choice active"
+                         onclick="selectPayment(this,'GCash')">
+
+                        <strong>GCash</strong>
+                        <span>Digital payment</span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         onclick="selectPayment(this,'Cash')">
+
+                        <strong>Cash</strong>
+                        <span>Pay upon pickup</span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         onclick="selectPayment(this,'Bank Transfer')">
+
+                        <strong>Bank Transfer</strong>
+                        <span>Send payment proof</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-outline"
+                    onclick="goTo('menu')">
+                ← Back to Menu
+            </button>
+
+        </div>
+
+
+        <aside>
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    Your order summary
+                </h2>
+
+                <div id="checkoutItems"></div>
+
+                <div class="cart-total">
+
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <strong id="checkoutSubtotal">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Pasabuy</span>
+                        <strong id="checkoutPasabuy">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Delivery</span>
+                        <strong id="checkoutDelivery">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Grand total</span>
+
+                        <strong class="grand-total"
+                                id="checkoutTotal">
+                            ₱0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary"
+                        style="width:100%;margin-top:15px"
+                        onclick="placeOrder()">
+
+                    Place Order
+
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TRACK ORDER
+===================================================== -->
+
+<section id="track" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Track Customer Order
+        </div>
+
+        <h1 class="page-title">
+            Good things are on their way.
+        </h1>
+
+        <p class="page-description">
+            Enter your order number to view the latest status.
+        </p>
+
+    </div>
+
+
+    <div class="track-search">
+
+        <input id="trackNumber"
+               placeholder="VB-1048">
+
+        <button class="btn btn-primary"
+                onclick="trackOrder()">
+            Find my order
+        </button>
+
+    </div>
+
+
+    <div class="track-card">
+
+        <div class="track-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    Order
+                </div>
+
+                <h2 id="trackOrderNumber">
+                    VB-1048
+                </h2>
+
+                <p style="
+                    color:var(--muted);
+                    font-size:10px;
+                    margin-top:4px;
+                ">
+                    A little patience, a lot of sweetness.
+                </p>
+
+            </div>
+
+            <span class="status-pill"
+                  id="trackStatus">
+                Preparing
+            </span>
+
+        </div>
+
+
+        <div class="timeline">
+
+            <div class="timeline-item completed">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Order received
+                    </strong>
+
+                    <p>
+                        Your order has been received.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item completed">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Confirmed
+                    </strong>
+
+                    <p>
+                        Your order has been confirmed.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item current">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Preparing
+                    </strong>
+
+                    <p>
+                        Your cream puffs are being prepared.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Ready for pickup
+                    </strong>
+
+                    <p>
+                        Your order will be ready soon.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Completed
+                    </strong>
+
+                    <p>
+                        Order completed.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ORDERS & PAYMENTS
+===================================================== -->
+
+<section id="orders" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Seller • Orders & Payments
+        </div>
+
+        <h1 class="page-title">
+            Orders & Payments
+        </h1>
+
+        <p class="page-description">
+            Monitor orders, payment status and fulfillment.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL ORDERS
+            </div>
+            <div class="stat-value">
+                8
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                GROSS SALES
+            </div>
+            <div class="stat-value wine">
+                ₱2,050
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PAID
+            </div>
+            <div class="stat-value green">
+                ₱1,060
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                UNPAID
+            </div>
+            <div class="stat-value">
+                ₱990
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PENDING
+            </div>
+            <div class="stat-value">
+                2
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="table-panel">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Recent orders
+            </div>
+
+            <button class="btn btn-outline"
+                    onclick="exportOrders()">
+                Export CSV
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Fulfillment</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="ordersTable">
+
+                    <tr>
+                        <td>VB-1048</td>
+                        <td>Maya Santos</td>
+                        <td>Oct 7, 2026</td>
+                        <td>Set A</td>
+                        <td>Pickup</td>
+                        <td>₱680</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge yellow">Preparing</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1047</td>
+                        <td>John Cruz</td>
+                        <td>Oct 7, 2026</td>
+                        <td>Box of 12</td>
+                        <td>Delivery</td>
+                        <td>₱380</td>
+                        <td><span class="badge red">Unpaid</span></td>
+                        <td><span class="badge purple">Confirmed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1046</td>
+                        <td>Leah Reyes</td>
+                        <td>Oct 6, 2026</td>
+                        <td>Set B</td>
+                        <td>Pickup</td>
+                        <td>₱245</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1045</td>
+                        <td>Mark Garcia</td>
+                        <td>Oct 6, 2026</td>
+                        <td>Box of 8</td>
+                        <td>Pickup</td>
+                        <td>₱265</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1044</td>
+                        <td>Anna Flores</td>
+                        <td>Oct 5, 2026</td>
+                        <td>Strawberry</td>
+                        <td>Delivery</td>
+                        <td>₱180</td>
+                        <td><span class="badge red">Unpaid</span></td>
+                        <td><span class="badge yellow">Pending</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SALES & PROFIT
+===================================================== -->
+
+<section id="sales" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Admin Sales & Profit Dashboard
+        </div>
+
+        <h1 class="page-title">
+            The business behind the sweetness.
+        </h1>
+
+        <p class="page-description">
+            A view of orders, sales, costs and profit.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL ORDERS
+            </div>
+            <div class="stat-value">
+                4
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                ITEMS SOLD
+            </div>
+            <div class="stat-value">
+                60
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL REVENUE
+            </div>
+            <div class="stat-value">
+                ₱1,720
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PRODUCT COST
+            </div>
+            <div class="stat-value">
+                ₱830
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                NET PROFIT
+            </div>
+            <div class="stat-value wine">
+                ₱1,060
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="table-panel">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Orders & contribution
+            </div>
+
+            <button class="btn btn-outline"
+                    onclick="exportSales()">
+                Export Summary
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Revenue</th>
+                        <th>Product Cost</th>
+                        <th>Expenses</th>
+                        <th>Profit</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>VB-1048</td>
+                        <td>Maya Santos</td>
+                        <td>₱680</td>
+                        <td>₱290</td>
+                        <td>₱60</td>
+                        <td>₱330</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1047</td>
+                        <td>John Cruz</td>
+                        <td>₱380</td>
+                        <td>₱160</td>
+                        <td>₱40</td>
+                        <td>₱180</td>
+                        <td><span class="badge purple">Confirmed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1046</td>
+                        <td>Leah Reyes</td>
+                        <td>₱245</td>
+                        <td>₱110</td>
+                        <td>₱20</td>
+                        <td>₱115</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1045</td>
+                        <td>Mark Garcia</td>
+                        <td>₱265</td>
+                        <td>₱120</td>
+                        <td>₱30</td>
+                        <td>₱115</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-panel" style="margin-top:18px">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Profit by product
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Cost</th>
+                        <th>Profit / Unit</th>
+                        <th>Units Sold</th>
+                        <th>Total Profit</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Original</td>
+                        <td>₱35</td>
+                        <td>₱20</td>
+                        <td>₱15</td>
+                        <td>20</td>
+                        <td>₱300</td>
+                    </tr>
+
+                    <tr>
+                        <td>Chocolate</td>
+                        <td>₱45</td>
+                        <td>₱25</td>
+                        <td>₱20</td>
+                        <td>10</td>
+                        <td>₱200</td>
+                    </tr>
+
+                    <tr>
+                        <td>Matcha</td>
+                        <td>₱45</td>
+                        <td>₱27</td>
+                        <td>₱18</td>
+                        <td>8</td>
+                        <td>₱144</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ube</td>
+                        <td>₱45</td>
+                        <td>₱24</td>
+                        <td>₱21</td>
+                        <td>10</td>
+                        <td>₱210</td>
+                    </tr>
+
+                    <tr>
+                        <td>Cookies & Cream</td>
+                        <td>₱45</td>
+                        <td>₱26</td>
+                        <td>₱19</td>
+                        <td>7</td>
+                        <td>₱133</td>
+                    </tr>
+
+                    <tr>
+                        <td>Strawberry</td>
+                        <td>₱50</td>
+                        <td>₱28</td>
+                        <td>₱22</td>
+                        <td>5</td>
+                        <td>₱110</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COSTS & EXPENSES
+===================================================== -->
+
+<section id="costs" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Admin Product Costs & Expenses
+        </div>
+
+        <h1 class="page-title">
+            Know the cost of every puff.
+        </h1>
+
+        <p class="page-description">
+            Track product costs, expenses and margins.
+        </p>
+
+    </div>
+
+
+    <div class="cost-layout">
+
+        <div>
+
+            <div class="cost-table">
+
+                <h2 class="panel-title">
+                    Per-piece costs & labor margin
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Selling Price</th>
+                            <th>Ingredient Cost</th>
+                            <th>Labor</th>
+                            <th>Profit</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Original</td>
+                            <td>₱35</td>
+                            <td>₱15</td>
+                            <td>₱5</td>
+                            <td><strong>₱15</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Chocolate</td>
+                            <td>₱45</td>
+                            <td>₱20</td>
+                            <td>₱5</td>
+                            <td><strong>₱20</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Matcha</td>
+                            <td>₱45</td>
+                            <td>₱22</td>
+                            <td>₱5</td>
+                            <td><strong>₱18</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Ube</td>
+                            <td>₱45</td>
+                            <td>₱19</td>
+                            <td>₱5</td>
+                            <td><strong>₱21</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Cookies & Cream</td>
+                            <td>₱45</td>
+                            <td>₱21</td>
+                            <td>₱5</td>
+                            <td><strong>₱19</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Strawberry</td>
+                            <td>₱50</td>
+                            <td>₱23</td>
+                            <td>₱5</td>
+                            <td><strong>₱22</strong></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="cost-table" style="margin-top:18px">
+
+                <h2 class="panel-title">
+                    Original-only box costs
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Box</th>
+                            <th>Selling Price</th>
+                            <th>Estimated Cost</th>
+                            <th>Profit</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Box of 8</td>
+                            <td>₱215</td>
+                            <td>₱160</td>
+                            <td>₱55</td>
+                        </tr>
+
+                        <tr>
+                            <td>Box of 12</td>
+                            <td>₱320</td>
+                            <td>₱240</td>
+                            <td>₱80</td>
+                        </tr>
+
+                        <tr>
+                            <td>Box of 20</td>
+                            <td>₱525</td>
+                            <td>₱400</td>
+                            <td>₱125</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <aside>
+
+            <div class="expense-form">
+
+                <h2 class="panel-title">
+                    Add another expense
+                </h2>
+
+                <div class="field">
+
+                    <label>
+                        Expense name
+                    </label>
+
+                    <input id="expenseName"
+                           placeholder="Example: Packaging">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Amount
+                    </label>
+
+                    <input id="expenseAmount"
+                           type="number"
+                           placeholder="0">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select id="expenseCategory">
+
+                        <option>
+                            Ingredients
+                        </option>
+
+                        <option>
+                            Packaging
+                        </option>
+
+                        <option>
+                            Transportation
+                        </option>
+
+                        <option>
+                            Utilities
+                        </option>
+
+                        <option>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button class="btn btn-primary"
+                        style="width:100%"
+                        onclick="addExpense()">
+
+                    + Add Expense
+
+                </button>
+
+
+                <div class="expense-list"
+                     id="expenseList">
+
+                    <div class="expense-row">
+                        <span>Delivery materials</span>
+                        <strong>₱80</strong>
+                    </div>
+
+                    <div class="expense-row">
+                        <span>Packaging</span>
+                        <strong>₱100</strong>
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin-top:18px;
+                    padding-top:15px;
+                    border-top:2px solid var(--border);
+                    display:flex;
+                    justify-content:space-between;
+                ">
+
+                    <strong>
+                        Total expenses
+                    </strong>
+
+                    <strong class="price"
+                            id="expenseTotal">
+                        ₱180
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     REFERENCE
+===================================================== -->
+
+<section id="reference" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Victoria Bakery Reference
+        </div>
+
+        <h1 class="page-title">
+            Product & Ordering Information
+        </h1>
+
+    </div>
+
+
+    <div class="reference-gallery">
+
+        <img src="assets/menu.jpg"
+             alt="Menu">
+
+        <img src="assets/pasabuy.jpg"
+             alt="Pasabuy">
+
+    </div>
+
+
+    <div style="margin-top:15px">
+
+        <img src="assets/products.jpg"
+             alt="Products"
+             style="
+                width:100%;
+                max-height:500px;
+                object-fit:cover;
+                border-radius:10px;
+                border:1px solid var(--border);
+             ">
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div class="toast" id="toast">
+    Added to order.
+</div>
+
+
+<script>
+
+/* =====================================================
+   PRODUCT DATA
+===================================================== */
+
+const products = [
+
+    {
+        name:"Original",
+        price:35,
+        description:"Classic vanilla custard cream"
+    },
+
+    {
+        name:"Chocolate",
+        price:45,
+        description:"Rich chocolate cream"
+    },
+
+    {
+        name:"Matcha",
+        price:45,
+        description:"Smooth and earthy matcha cream"
+    },
+
+    {
+        name:"Ube",
+        price:45,
+        description:"Creamy ube halaya filling"
+    },
+
+    {
+        name:"Cookies & Cream",
+        price:45,
+        description:"Creamy vanilla with crushed cookies"
+    },
+
+    {
+        name:"Strawberry",
+        price:50,
+        description:"Sweet and fruity strawberry cream"
+    }
+
+];
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+let cart = [];
+
+let fulfillment = "Pickup";
+
+let paymentMethod = "GCash";
+
+let orderCounter = 1048;
+
+
+/* =====================================================
+   CREATE PRODUCTS
+===================================================== */
+
+function renderProducts(){
+
+    const container =
+        document.getElementById("products");
+
+    container.innerHTML = "";
+
+    products.forEach((product,index)=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "product-card";
+
+        card.innerHTML = `
+
+            <div class="product-photo">
+
+                <img
+                    src="assets/products.jpg"
+                    alt="${product.name}"
+                    style="
+                        object-position:${index * 18}% center;
+                    "
+                >
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div class="product-description">
+                    ${product.description}
+                </div>
+
+                <div class="product-bottom">
+
+                    <span class="price">
+                        ₱${product.price}
+                    </span>
+
+                    <button
+                        class="add-btn"
+                        onclick="addItem('${product.name}',${product.price})">
+
+                        + Add
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   ADD ITEM
+===================================================== */
+
+function addItem(name,price){
+
+    const existing =
+        cart.find(item=>item.name===name);
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+            name:name,
+            price:price,
+            quantity:1
+        });
+
+    }
+
+    updateCart();
+
+    showToast(name+" added to your order.");
+
+}
+
+
+/* =====================================================
+   REMOVE ITEM
+===================================================== */
+
+function removeItem(index){
+
+    cart.splice(index,1);
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   CHANGE QUANTITY
+===================================================== */
+
+function changeQuantity(index,amount){
+
+    cart[index].quantity += amount;
+
+    if(cart[index].quantity<=0){
+
+        cart.splice(index,1);
+
+    }
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   CLEAR CART
+===================================================== */
+
+function clearCart(){
+
+    cart=[];
+
+    updateCart();
+
+    showToast("Order cleared.");
+
+}
+
+
+/* =====================================================
+   SUBTOTAL
+===================================================== */
+
+function getSubtotal(){
+
+    return cart.reduce(
+        (sum,item)=>
+        sum + (item.price * item.quantity),
+        0
+    );
+
+}
+
+
+/* =====================================================
+   PASABUY FEE
+===================================================== */
+
+function getPasabuyFee(){
+
+    let totalItems =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.quantity,
+            0
+        );
+
+    if(totalItems>=20){
+        return 70;
+    }
+
+    if(totalItems>=12){
+        return 60;
+    }
+
+    if(totalItems>=8){
+        return 50;
+    }
+
+    return 0;
+
+}
+
+
+/* =====================================================
+   DELIVERY FEE
+===================================================== */
+
+function getDeliveryFee(){
+
+    if(fulfillment !== "Delivery"){
+        return 0;
+    }
+
+    let totalItems =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.quantity,
+            0
+        );
+
+    if(totalItems>=20){
+        return 0;
+    }
+
+    return 30;
+
+}
+
+
+/* =====================================================
+   GRAND TOTAL
+===================================================== */
+
+function getGrandTotal(){
+
+    return getSubtotal()
+        + getPasabuyFee()
+        + getDeliveryFee();
+
+}
+
+
+/* =====================================================
+   FORMAT PESO
+===================================================== */
+
+function peso(amount){
+
+    return "₱" +
+        Number(amount).toLocaleString(
+            "en-PH"
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE CART
+===================================================== */
+
+function updateCart(){
+
+    const container =
+        document.getElementById("cartItems");
+
+    if(cart.length===0){
+
+        container.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:30px 10px;
+                color:#8b7e82;
+                font-size:11px;
+            ">
+
+                Your order is empty.
+
+            </div>
+
+        `;
+
+    }else{
+
+        container.innerHTML =
+            cart.map((item,index)=>`
+
+                <div class="cart-item">
+
+                    <div class="cart-item-row">
+
+                        <span class="cart-item-name">
+                            ${item.name}
+                        </span>
+
+                        <strong>
+                            ${peso(item.price * item.quantity)}
+                        </strong>
+
+                    </div>
+
+                    <div class="cart-controls">
+
+                        <button
+                            class="qty-btn"
+                            onclick="changeQuantity(${index},-1)">
+                            −
+                        </button>
+
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            class="qty-btn"
+                            onclick="changeQuantity(${index},1)">
+                            +
+                        </button>
+
+                        <button
+                            class="remove-btn"
+                            onclick="removeItem(${index})">
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    const subtotal =
+        getSubtotal();
+
+    const pasabuy =
+        getPasabuyFee();
+
+    const delivery =
+        getDeliveryFee();
+
+    const total =
+        subtotal + pasabuy + delivery;
+
+
+    document.getElementById("subtotal")
+        .textContent = peso(subtotal);
+
+    document.getElementById("pasabuyFee")
+        .textContent = peso(pasabuy);
+
+    document.getElementById("deliveryFee")
+        .textContent = peso(delivery);
+
+    document.getElementById("grandTotal")
+        .textContent = peso(total);
+
+
+    renderCheckout();
+
+}
+
+
+/* =====================================================
+   CHECKOUT SUMMARY
+===================================================== */
+
+function renderCheckout(){
+
+    const container =
+        document.getElementById(
+            "checkoutItems"
+        );
+
+    if(!container) return;
+
+    if(cart.length===0){
+
+        container.innerHTML = `
+            <p style="
+                color:var(--muted);
+                font-size:11px;
+            ">
+                No items in your order.
+            </p>
+        `;
+
+    }else{
+
+        container.innerHTML =
+            cart.map(item=>`
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    padding:9px 0;
+                    border-bottom:1px solid var(--border);
+                    font-size:11px;
+                ">
+
+                    <span>
+                        ${item.name}
+                        × ${item.quantity}
+                    </span>
+
+                    <strong>
+                        ${peso(item.price*item.quantity)}
+                    </strong>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    document.getElementById(
+        "checkoutSubtotal"
+    ).textContent =
+        peso(getSubtotal());
+
+
+    document.getElementById(
+        "checkoutPasabuy"
+    ).textContent =
+        peso(getPasabuyFee());
+
+
+    document.getElementById(
+        "checkoutDelivery"
+    ).textContent =
+        peso(getDeliveryFee());
+
+
+    document.getElementById(
+        "checkoutTotal"
+    ).textContent =
+        peso(getGrandTotal());
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+function goTo(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>{
+            p.classList.remove("active");
+        });
+
+
+    const target =
+        document.getElementById(page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(button=>{
+
+            button.classList.remove("active");
+
+            if(button.dataset.page===page){
+                button.classList.add("active");
+            }
+
+        });
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+
+    if(page==="checkout"){
+        renderCheckout();
+    }
+
+}
+
+
+/* =====================================================
+   NAVIGATION BUTTONS
+===================================================== */
+
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>goTo(button.dataset.page)
+        );
+
+    });
+
+
+/* =====================================================
+   FULFILLMENT
+===================================================== */
+
+function setFulfillment(type){
+
+    fulfillment = type;
+
+
+    document
+        .querySelectorAll(
+            "#pickupChoice,#deliveryChoice,#meetupChoice"
+        )
+        .forEach(el=>{
+            el.classList.remove("active");
+        });
+
+
+    if(type==="Pickup"){
+        document
+            .getElementById("pickupChoice")
+            .classList.add("active");
+    }
+
+    if(type==="Delivery"){
+        document
+            .getElementById("deliveryChoice")
+            .classList.add("active");
+    }
+
+    if(type==="Meetup"){
+        document
+            .getElementById("meetupChoice")
+            .classList.add("active");
+    }
+
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+function selectPayment(element,method){
+
+    paymentMethod=method;
+
+
+    document
+        .querySelectorAll(".choice")
+        .forEach(choice=>{
+
+            if(
+                choice.parentElement.classList.contains(
+                    "choice-grid"
+                )
+            ){
+                choice.classList.remove("active");
+            }
+
+        });
+
+
+    element.classList.add("active");
+
+}
+
+
+/* =====================================================
+   PLACE ORDER
+===================================================== */
+
+function placeOrder(){
+
+    if(cart.length===0){
+
+        showToast(
+            "Please add an item first."
+        );
+
+        goTo("menu");
+
+        return;
+
+    }
+
+
+    const name =
+        document
+        .getElementById("customerName")
+        .value.trim();
+
+
+    const phone =
+        document
+        .getElementById("customerPhone")
+        .value.trim();
+
+
+    if(!name || !phone){
+
+        showToast(
+            "Please enter your name and contact number."
+        );
+
+        return;
+
+    }
+
+
+    orderCounter++;
+
+    const orderNumber =
+        "VB-" + orderCounter;
+
+
+    const order = {
+
+        id:orderNumber,
+
+        customer:name,
+
+        phone:phone,
+
+        address:
+            document
+            .getElementById("customerAddress")
+            .value,
+
+        location:
+            document
+            .getElementById("pickupLocation")
+            .value,
+
+        fulfillment:fulfillment,
+
+        payment:paymentMethod,
+
+        items:[...cart],
+
+        total:getGrandTotal(),
+
+        status:"Preparing",
+
+        date:new Date().toLocaleDateString(
+            "en-PH"
+        )
+
+    };
+
+
+    localStorage.setItem(
+        "victoriaLatestOrder",
+        JSON.stringify(order)
+    );
+
+
+    let storedOrders =
+        JSON.parse(
+            localStorage.getItem(
+                "victoriaOrders"
+            ) || "[]"
+        );
+
+
+    storedOrders.unshift(order);
+
+
+    localStorage.setItem(
+        "victoriaOrders",
+        JSON.stringify(storedOrders)
+    );
+
+
+    document.getElementById(
+        "trackNumber"
+    ).value=orderNumber;
+
+
+    document.getElementById(
+        "trackOrderNumber"
+    ).textContent=orderNumber;
+
+
+    cart=[];
+
+    updateCart();
+
+    showToast(
+        "Order "+orderNumber+" placed successfully!"
+    );
+
+
+    goTo("track");
+
+}
+
+
+/* =====================================================
+   TRACK ORDER
+===================================================== */
+
+function trackOrder(){
+
+    const number =
+        document
+        .getElementById("trackNumber")
+        .value.trim();
+
+
+    if(!number){
+
+        showToast(
+            "Enter an order number."
+        );
+
+        return;
+
+    }
+
+
+    const storedOrders =
+        JSON.parse(
+            localStorage.getItem(
+                "victoriaOrders"
+            ) || "[]"
+        );
+
+
+    const found =
+        storedOrders.find(
+            order=>order.id===number
+        );
+
+
+    document.getElementById(
+        "trackOrderNumber"
+    ).textContent=number;
+
+
+    if(found){
+
+        document.getElementById(
+            "trackStatus"
+        ).textContent=found.status;
+
+        showToast(
+            "Order found."
+        );
+
+    }else{
+
+        showToast(
+            "Showing sample tracking information."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   REFERENCE PAGE
+===================================================== */
+
+function showReference(){
+
+    goTo("reference");
+
+}
+
+
+/* =====================================================
+   EXPENSES
+===================================================== */
+
+let expenseTotal=180;
+
+
+function addExpense(){
+
+    const name =
+        document
+        .getElementById("expenseName")
+        .value.trim();
+
+
+    const amount =
+        Number(
+            document
+            .getElementById("expenseAmount")
+            .value
+        );
+
+
+    if(!name || !amount){
+
+        showToast(
+            "Enter expense name and amount."
+        );
+
+        return;
+
+    }
+
+
+    expenseTotal += amount;
+
+
+    const list =
+        document.getElementById(
+            "expenseList"
+        );
+
+
+    const row =
+        document.createElement("div");
+
+
+    row.className="expense-row";
+
+
+    row.innerHTML=`
+
+        <span>
+            ${name}
+        </span>
+
+        <strong>
+            ${peso(amount)}
+        </strong>
+
+    `;
+
+
+    list.appendChild(row);
+
+
+    document.getElementById(
+        "expenseTotal"
+    ).textContent=
+        peso(expenseTotal);
+
+
+    document.getElementById(
+        "expenseName"
+    ).value="";
+
+
+    document.getElementById(
+        "expenseAmount"
+    ).value="";
+
+
+    showToast(
+        "Expense added."
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT ORDERS
+===================================================== */
+
+function exportOrders(){
+
+    const rows = [
+
+        [
+            "Order",
+            "Customer",
+            "Date",
+            "Items",
+            "Fulfillment",
+            "Total",
+            "Payment",
+            "Status"
+        ],
+
+        [
+            "VB-1048",
+            "Maya Santos",
+            "Oct 7, 2026",
+            "Set A",
+            "Pickup",
+            "680",
+            "Paid",
+            "Preparing"
+        ],
+
+        [
+            "VB-1047",
+            "John Cruz",
+            "Oct 7, 2026",
+            "Box of 12",
+            "Delivery",
+            "380",
+            "Unpaid",
+            "Confirmed"
+        ]
+
+    ];
+
+
+    downloadCSV(
+        rows,
+        "victoria-bakery-orders.csv"
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT SALES
+===================================================== */
+
+function exportSales(){
+
+    const rows=[
+
+        [
+            "Order",
+            "Customer",
+            "Revenue",
+            "Product Cost",
+            "Expenses",
+            "Profit"
+        ],
+
+        [
+            "VB-1048",
+            "Maya Santos",
+            "680",
+            "290",
+            "60",
+            "330"
+        ],
+
+        [
+            "VB-1047",
+            "John Cruz",
+            "380",
+            "160",
+            "40",
+            "180"
+        ],
+
+        [
+            "VB-1046",
+            "Leah Reyes",
+            "245",
+            "110",
+            "20",
+            "115"
+        ]
+
+    ];
+
+
+    downloadCSV(
+        rows,
+        "victoria-bakery-sales.csv"
+    );
+
+}
+
+
+/* =====================================================
+   CSV GENERATOR
+===================================================== */
+
+function downloadCSV(rows,filename){
+
+    const csv =
+        rows
+        .map(row=>
+            row
+            .map(value=>
+                `"${String(value)
+                    .replace(/"/g,'""')}"`
+            )
+            .join(",")
+        )
+        .join("\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:"text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href=url;
+
+    link.download=filename;
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+        setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+        },2500);
+
+}
+
+
+/* =====================================================
+   LOAD SAVED ORDER
+===================================================== */
+
+function loadSavedOrder(){
+
+    const latest =
+        localStorage.getItem(
+            "victoriaLatestOrder"
+        );
+
+
+    if(!latest) return;
+
+
+    try{
+
+        const order =
+            JSON.parse(latest);
+
+
+        if(order.id){
+
+            document.getElementById(
+                "trackNumber"
+            ).value=order.id;
+
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+function setDefaultDate(){
+
+    const date =
+        document.getElementById(
+            "orderDate"
+        );
+
+
+    if(date){
+
+        const today =
+            new Date();
+
+
+        const yyyy =
+            today.getFullYear();
+
+
+        const mm =
+            String(
+                today.getMonth()+1
+            ).padStart(2,"0");
+
+
+        const dd =
+            String(
+                today.getDate()
+            ).padStart(2,"0");
+
+
+        date.value =
+            `${yyyy}-${mm}-${dd}`;
+
+    }
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+renderProducts();
+
+updateCart();
+
+loadSavedOrder();
+
+setDefaultDate();
+
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victoria Bakery POS</title>
+
+<style>
+:root{
+    --wine:#8e294e;
+    --wine-dark:#6f1f3b;
+    --wine-light:#f8e7ed;
+    --cream:#fbf8f1;
+    --cream2:#f4eee2;
+    --white:#ffffff;
+    --text:#30272a;
+    --muted:#7d7074;
+    --green:#4c8060;
+    --green-light:#e7f1e8;
+    --yellow:#b18427;
+    --yellow-light:#f7efd6;
+    --red:#a94452;
+    --red-light:#f8e5e7;
+    --border:#e6ddd5;
+    --shadow:0 4px 18px rgba(72,35,45,.07);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:#eeeae5;
+    color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
+    height:68px;
+    background:var(--white);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-logo{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--wine);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Georgia,serif;
+    font-weight:bold;
+}
+
+.brand-name{
+    font-family:Georgia,serif;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.brand-sub{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:2px;
+}
+
+.nav{
+    display:flex;
+    gap:4px;
+    height:100%;
+    align-items:center;
+}
+
+.nav button{
+    height:100%;
+    border:0;
+    background:transparent;
+    padding:0 13px;
+    color:#766a6d;
+    font-size:12px;
+}
+
+.nav button:hover,
+.nav button.active{
+    color:var(--wine);
+    border-bottom:2px solid var(--wine);
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+}
+
+.small-btn{
+    border:1px solid var(--border);
+    background:white;
+    padding:8px 12px;
+    border-radius:7px;
+    font-size:11px;
+}
+
+.small-btn.primary{
+    background:var(--wine);
+    color:white;
+    border-color:var(--wine);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    max-width:1500px;
+    margin:auto;
+    padding:28px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-header{
+    margin-bottom:20px;
+}
+
+.eyebrow{
+    color:var(--wine);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:10px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.page-title{
+    font-family:Georgia,serif;
+    font-size:31px;
+    font-weight:500;
+}
+
+.page-description{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:7px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+    border:0;
+    padding:11px 16px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:var(--wine);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--wine-dark);
+}
+
+.btn-outline{
+    background:white;
+    border:1px solid var(--border);
+    color:var(--text);
+}
+
+.btn-danger{
+    background:var(--red);
+    color:white;
+}
+
+.btn-green{
+    background:var(--green);
+    color:white;
+}
+
+/* =========================
+   CUSTOMER MENU
+========================= */
+
+.menu-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 330px;
+    gap:18px;
+}
+
+.menu-main{
+    min-width:0;
+}
+
+.hero{
+    background:var(--cream);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:18px;
+}
+
+.hero img{
+    width:100%;
+    height:310px;
+    object-fit:cover;
+    display:block;
+}
+
+.hero-content{
+    padding:22px 25px;
+}
+
+.hero h1{
+    font-family:Georgia,serif;
+    font-size:28px;
+    font-weight:500;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:6px;
+}
+
+.section-title{
+    font-family:Georgia,serif;
+    font-size:18px;
+    margin:22px 0 12px;
+}
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.product-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    overflow:hidden;
+    transition:.2s;
+}
+
+.product-card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow);
+}
+
+.product-photo{
+    height:150px;
+    background:var(--cream2);
+    overflow:hidden;
+}
+
+.product-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.product-info{
+    padding:13px;
+}
+
+.product-name{
+    font-family:Georgia,serif;
+    font-size:15px;
+}
+
+.product-description{
+    color:var(--muted);
+    font-size:10px;
+    min-height:30px;
+    margin-top:4px;
+}
+
+.product-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+}
+
+.price{
+    color:var(--wine);
+    font-weight:bold;
+}
+
+.add-btn{
+    border:0;
+    background:var(--wine);
+    color:white;
+    border-radius:5px;
+    padding:7px 11px;
+    font-size:10px;
+}
+
+/* BOXES */
+
+.box-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.box-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:17px;
+}
+
+.box-card h3{
+    font-family:Georgia,serif;
+    font-size:15px;
+}
+
+.box-price{
+    color:var(--wine);
+    font-size:17px;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+.box-card p{
+    font-size:10px;
+    color:var(--muted);
+}
+
+/* SETS */
+
+.set-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.set-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:17px;
+}
+
+.set-header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.set-name{
+    background:#f5d9df;
+    color:var(--wine);
+    padding:4px 10px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:11px;
+}
+
+.set-card ul{
+    list-style:none;
+    margin-top:10px;
+}
+
+.set-card li{
+    font-size:11px;
+    margin:4px 0;
+}
+
+/* =========================
+   CART
+========================= */
+
+.cart{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:18px;
+    position:sticky;
+    top:85px;
+    height:max-content;
+}
+
+.cart h2{
+    font-family:Georgia,serif;
+    font-size:19px;
+    font-weight:500;
+}
+
+.cart-sub{
+    font-size:10px;
+    color:var(--muted);
+    margin:5px 0 14px;
+}
+
+.cart-item{
+    padding:11px 0;
+    border-bottom:1px solid #eee6df;
+}
+
+.cart-item-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.cart-item-name{
+    font-weight:600;
+}
+
+.cart-controls{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:7px;
+}
+
+.qty-btn{
+    width:23px;
+    height:23px;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:4px;
+}
+
+.remove-btn{
+    margin-left:auto;
+    border:0;
+    background:none;
+    color:var(--red);
+    font-size:10px;
+}
+
+.cart-total{
+    margin-top:15px;
+    padding-top:15px;
+    border-top:2px solid var(--border);
+}
+
+.total-row{
+    display:flex;
+    justify-content:space-between;
+    margin:6px 0;
+    font-size:12px;
+}
+
+.grand-total{
+    color:var(--wine);
+    font-size:21px;
+    font-weight:bold;
+}
+
+.cart .btn{
+    width:100%;
+    margin-top:12px;
+}
+
+/* =========================
+   CHECKOUT
+========================= */
+
+.checkout-layout{
+    display:grid;
+    grid-template-columns:1fr 350px;
+    gap:18px;
+}
+
+.panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:16px;
+}
+
+.panel-title{
+    font-family:Georgia,serif;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    font-size:10px;
+    color:#685c60;
+    font-weight:600;
+}
+
+.field input,
+.field select,
+.field textarea{
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:10px;
+    outline:none;
+    font-size:12px;
+    background:#fffdfa;
+}
+
+.field textarea{
+    min-height:75px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:var(--wine);
+}
+
+.choice-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+}
+
+.choice{
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.choice.active{
+    border-color:var(--wine);
+    background:var(--wine-light);
+}
+
+.choice strong{
+    display:block;
+    font-size:11px;
+}
+
+.choice span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+/* =========================
+   TRACK
+========================= */
+
+.track-search{
+    display:flex;
+    gap:8px;
+    max-width:650px;
+}
+
+.track-search input{
+    flex:1;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:7px;
+}
+
+.track-card{
+    margin-top:20px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px;
+}
+
+.track-header{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    padding-bottom:15px;
+}
+
+.status-pill{
+    border-radius:20px;
+    padding:5px 9px;
+    background:var(--yellow-light);
+    color:var(--yellow);
+    font-size:10px;
+}
+
+.timeline{
+    margin:25px 0;
+}
+
+.timeline-item{
+    display:flex;
+    gap:15px;
+    min-height:58px;
+}
+
+.timeline-dot{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    border:2px solid #d6cfd0;
+    background:white;
+    position:relative;
+    flex-shrink:0;
+}
+
+.timeline-item:not(:last-child) .timeline-dot:after{
+    content:"";
+    position:absolute;
+    top:18px;
+    left:7px;
+    width:2px;
+    height:42px;
+    background:#ddd5d7;
+}
+
+.timeline-item.completed .timeline-dot{
+    border-color:var(--green);
+    background:var(--green);
+}
+
+.timeline-item.current .timeline-dot{
+    border-color:var(--wine);
+    background:var(--wine);
+}
+
+.timeline-content strong{
+    font-size:12px;
+}
+
+.timeline-content p{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* =========================
+   ADMIN DASHBOARD
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.stat{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:16px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.stat-value{
+    font-size:23px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.stat-value.wine{
+    color:var(--wine);
+}
+
+.stat-value.green{
+    color:var(--green);
+}
+
+.table-panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.table-header{
+    padding:17px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.table-title{
+    font-family:Georgia,serif;
+    font-size:17px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:11px;
+}
+
+th{
+    text-align:left;
+    background:#faf7f1;
+    color:#756a6d;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    padding:11px 14px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:12px 14px;
+    border-bottom:1px solid #eee8e3;
+}
+
+tr:hover td{
+    background:#fffcf7;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:12px;
+    font-size:9px;
+}
+
+.badge.green{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+.badge.yellow{
+    background:var(--yellow-light);
+    color:var(--yellow);
+}
+
+.badge.red{
+    background:var(--red-light);
+    color:var(--red);
+}
+
+.badge.purple{
+    background:var(--wine-light);
+    color:var(--wine);
+}
+
+/* =========================
+   COSTS
+========================= */
+
+.cost-layout{
+    display:grid;
+    grid-template-columns:1fr 330px;
+    gap:18px;
+}
+
+.cost-table{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+}
+
+.expense-form{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    height:max-content;
+}
+
+.expense-form .field{
+    margin-bottom:12px;
+}
+
+.expense-list{
+    margin-top:18px;
+}
+
+.expense-row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:11px;
+}
+
+/* =========================
+   IMAGE SECTION
+========================= */
+
+.reference-gallery{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:12px;
+}
+
+.reference-gallery img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    border-radius:9px;
+    border:1px solid var(--border);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#30272a;
+    color:white;
+    padding:13px 17px;
+    border-radius:8px;
+    font-size:11px;
+    opacity:0;
+    transform:translateY(15px);
+    pointer-events:none;
+    transition:.3s;
+    z-index:500;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+    .nav button{
+        padding:0 7px;
+        font-size:10px;
+    }
+
+    .menu-layout,
+    .checkout-layout,
+    .cost-layout{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        position:static;
+    }
+
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:750px){
+
+    .topbar{
+        height:auto;
+        padding:12px;
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    .nav{
+        order:3;
+        width:100%;
+        overflow-x:auto;
+        height:45px;
+    }
+
+    .nav button{
+        white-space:nowrap;
+    }
+
+    .main{
+        padding:15px;
+    }
+
+    .product-grid,
+    .box-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .set-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .reference-gallery{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-logo">V</div>
+
+        <div>
+            <div class="brand-name">Victoria Bakery</div>
+            <div class="brand-sub">BAGUIO • CREAM PUFFS</div>
+        </div>
+    </div>
+
+    <nav class="nav">
+
+        <button class="nav-btn active" data-page="menu">
+            Customer Order
+        </button>
+
+        <button class="nav-btn" data-page="checkout">
+            Checkout
+        </button>
+
+        <button class="nav-btn" data-page="track">
+            Track Order
+        </button>
+
+        <button class="nav-btn" data-page="orders">
+            Orders & Payments
+        </button>
+
+        <button class="nav-btn" data-page="sales">
+            Sales & Profit
+        </button>
+
+        <button class="nav-btn" data-page="costs">
+            Costs & Expenses
+        </button>
+
+    </nav>
+
+    <div class="header-actions">
+        <button class="small-btn" onclick="showReference()">
+            View Menu
+        </button>
+
+        <button class="small-btn primary" onclick="goTo('menu')">
+            New Order
+        </button>
+    </div>
+
+</header>
+
+
+<main class="main">
+
+<!-- =====================================================
+     CUSTOMER MENU
+===================================================== -->
+
+<section id="menu" class="page active">
+
+    <div class="page-header">
+        <div class="eyebrow">Victoria Bakery • Customer Ordering</div>
+
+        <h1 class="page-title">
+            A little box of happiness.
+        </h1>
+
+        <p class="page-description">
+            Choose your cream puffs, build your box, and place your order.
+        </p>
+    </div>
+
+
+    <div class="menu-layout">
+
+        <div class="menu-main">
+
+            <div class="hero">
+
+                <img src="assets/menu.jpg"
+                     alt="Victoria Bakery Cream Puff Menu"
+                     onerror="this.style.display='none'">
+
+                <div class="hero-content">
+
+                    <h1>
+                        Deliciously Soft, Perfectly Filled.
+                    </h1>
+
+                    <p>
+                        Handcrafted cream puffs with a variety of flavors,
+                        made with love in Baguio.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Cream Puff Flavors
+            </h2>
+
+
+            <div class="product-grid" id="products"></div>
+
+
+            <h2 class="section-title">
+                Box Options
+            </h2>
+
+
+            <div class="box-grid">
+
+                <div class="box-card">
+
+                    <h3>Box of 8</h3>
+
+                    <div class="box-price">
+                        ₱215
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 8',215)">
+                        Add
+                    </button>
+
+                </div>
+
+
+                <div class="box-card">
+
+                    <h3>Box of 12</h3>
+
+                    <div class="box-price">
+                        ₱320
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 12',320)">
+                        Add
+                    </button>
+
+                </div>
+
+
+                <div class="box-card">
+
+                    <h3>Box of 20</h3>
+
+                    <div class="box-price">
+                        ₱525
+                    </div>
+
+                    <p>
+                        Original cream puffs
+                    </p>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Box of 20',525)">
+                        Add
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Assorted Cream Puff Sets
+            </h2>
+
+
+            <div class="set-grid">
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET A</span>
+                        <strong>₱250</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>1 Ube</li>
+                        <li>1 Matcha</li>
+                        <li>1 Cookies & Cream</li>
+                        <li>1 Strawberry</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set A',250)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET B</span>
+                        <strong>₱245</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set B',245)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET C</span>
+                        <strong>₱360</strong>
+                    </div>
+
+                    <ul>
+                        <li>4 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                        <li>2 Cookies & Cream</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set C',360)">
+                        Add Set
+                    </button>
+
+                </div>
+
+
+                <div class="set-card">
+
+                    <div class="set-header">
+                        <span class="set-name">SET D</span>
+                        <strong>₱380</strong>
+                    </div>
+
+                    <ul>
+                        <li>2 Original</li>
+                        <li>2 Chocolate</li>
+                        <li>2 Ube</li>
+                        <li>2 Matcha</li>
+                        <li>2 Cookies & Cream</li>
+                        <li>2 Strawberry</li>
+                    </ul>
+
+                    <button class="btn btn-primary"
+                            style="margin-top:12px"
+                            onclick="addItem('Set D',380)">
+                        Add Set
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <h2 class="section-title">
+                Pasabuy & Store Information
+            </h2>
+
+
+            <div class="reference-gallery">
+
+                <img src="assets/pasabuy.jpg"
+                     alt="Pasabuy Information">
+
+                <img src="assets/products.jpg"
+                     alt="Victoria Bakery Products">
+
+            </div>
+
+        </div>
+
+
+        <!-- CART -->
+
+        <aside class="cart">
+
+            <h2>Your box of joy</h2>
+
+            <div class="cart-sub">
+                Review your selections before checkout.
+            </div>
+
+            <div id="cartItems">
+
+                <div style="
+                    text-align:center;
+                    padding:30px 10px;
+                    color:#8b7e82;
+                    font-size:11px;
+                ">
+                    Your order is empty.
+                </div>
+
+            </div>
+
+
+            <div class="cart-total">
+
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Pasabuy fee</span>
+                    <strong id="pasabuyFee">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Delivery</span>
+                    <strong id="deliveryFee">₱0</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Grand total</span>
+                    <strong class="grand-total" id="grandTotal">
+                        ₱0
+                    </strong>
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary"
+                    onclick="goTo('checkout')">
+                Continue to Checkout
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="clearCart()">
+                Clear Order
+            </button>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CHECKOUT
+===================================================== -->
+
+<section id="checkout" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Customer Details & Checkout
+        </div>
+
+        <h1 class="page-title">
+            The sweetest final details.
+        </h1>
+
+        <p class="page-description">
+            Tell us where to send your order and how you would like to receive it.
+        </p>
+
+    </div>
+
+
+    <div class="checkout-layout">
+
+        <div>
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    01 — Your details
+                </h2>
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label>
+                            Customer name
+                        </label>
+
+                        <input id="customerName"
+                               type="text"
+                               placeholder="Juan Dela Cruz">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Contact number
+                        </label>
+
+                        <input id="customerPhone"
+                               type="text"
+                               placeholder="09XX XXX XXXX">
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            Address
+                        </label>
+
+                        <input id="customerAddress"
+                               type="text"
+                               placeholder="Complete address">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Pickup location
+                        </label>
+
+                        <select id="pickupLocation">
+
+                            <option>
+                                WalterMart Paniqui
+                            </option>
+
+                            <option>
+                                Nancamarinan
+                            </option>
+
+                            <option>
+                                Ramos 7/11
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Order date
+                        </label>
+
+                        <input id="orderDate"
+                               type="date">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    02 — How would you like your order?
+                </h2>
+
+                <div class="choice-grid">
+
+                    <div class="choice active"
+                         id="pickupChoice"
+                         onclick="setFulfillment('Pickup')">
+
+                        <strong>
+                            Pickup
+                        </strong>
+
+                        <span>
+                            Meet us at the selected location.
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         id="deliveryChoice"
+                         onclick="setFulfillment('Delivery')">
+
+                        <strong>
+                            Delivery
+                        </strong>
+
+                        <span>
+                            Delivery starts at ₱30.
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         id="meetupChoice"
+                         onclick="setFulfillment('Meetup')">
+
+                        <strong>
+                            Meetup
+                        </strong>
+
+                        <span>
+                            Arrange a meetup location.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin-top:15px;
+                    background:#edf4e9;
+                    border-radius:7px;
+                    padding:12px;
+                    font-size:10px;
+                    color:#47664d;
+                ">
+                    Free delivery applies to a minimum box of 20.
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    03 — Payment
+                </h2>
+
+                <div class="choice-grid">
+
+                    <div class="choice active"
+                         onclick="selectPayment(this,'GCash')">
+
+                        <strong>GCash</strong>
+                        <span>Digital payment</span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         onclick="selectPayment(this,'Cash')">
+
+                        <strong>Cash</strong>
+                        <span>Pay upon pickup</span>
+
+                    </div>
+
+
+                    <div class="choice"
+                         onclick="selectPayment(this,'Bank Transfer')">
+
+                        <strong>Bank Transfer</strong>
+                        <span>Send payment proof</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-outline"
+                    onclick="goTo('menu')">
+                ← Back to Menu
+            </button>
+
+        </div>
+
+
+        <aside>
+
+            <div class="panel">
+
+                <h2 class="panel-title">
+                    Your order summary
+                </h2>
+
+                <div id="checkoutItems"></div>
+
+                <div class="cart-total">
+
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <strong id="checkoutSubtotal">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Pasabuy</span>
+                        <strong id="checkoutPasabuy">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Delivery</span>
+                        <strong id="checkoutDelivery">
+                            ₱0
+                        </strong>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Grand total</span>
+
+                        <strong class="grand-total"
+                                id="checkoutTotal">
+                            ₱0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary"
+                        style="width:100%;margin-top:15px"
+                        onclick="placeOrder()">
+
+                    Place Order
+
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TRACK ORDER
+===================================================== -->
+
+<section id="track" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Track Customer Order
+        </div>
+
+        <h1 class="page-title">
+            Good things are on their way.
+        </h1>
+
+        <p class="page-description">
+            Enter your order number to view the latest status.
+        </p>
+
+    </div>
+
+
+    <div class="track-search">
+
+        <input id="trackNumber"
+               placeholder="VB-1048">
+
+        <button class="btn btn-primary"
+                onclick="trackOrder()">
+            Find my order
+        </button>
+
+    </div>
+
+
+    <div class="track-card">
+
+        <div class="track-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    Order
+                </div>
+
+                <h2 id="trackOrderNumber">
+                    VB-1048
+                </h2>
+
+                <p style="
+                    color:var(--muted);
+                    font-size:10px;
+                    margin-top:4px;
+                ">
+                    A little patience, a lot of sweetness.
+                </p>
+
+            </div>
+
+            <span class="status-pill"
+                  id="trackStatus">
+                Preparing
+            </span>
+
+        </div>
+
+
+        <div class="timeline">
+
+            <div class="timeline-item completed">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Order received
+                    </strong>
+
+                    <p>
+                        Your order has been received.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item completed">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Confirmed
+                    </strong>
+
+                    <p>
+                        Your order has been confirmed.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item current">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Preparing
+                    </strong>
+
+                    <p>
+                        Your cream puffs are being prepared.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Ready for pickup
+                    </strong>
+
+                    <p>
+                        Your order will be ready soon.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="timeline-item">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+
+                    <strong>
+                        Completed
+                    </strong>
+
+                    <p>
+                        Order completed.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ORDERS & PAYMENTS
+===================================================== -->
+
+<section id="orders" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Seller • Orders & Payments
+        </div>
+
+        <h1 class="page-title">
+            Orders & Payments
+        </h1>
+
+        <p class="page-description">
+            Monitor orders, payment status and fulfillment.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL ORDERS
+            </div>
+            <div class="stat-value">
+                8
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                GROSS SALES
+            </div>
+            <div class="stat-value wine">
+                ₱2,050
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PAID
+            </div>
+            <div class="stat-value green">
+                ₱1,060
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                UNPAID
+            </div>
+            <div class="stat-value">
+                ₱990
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PENDING
+            </div>
+            <div class="stat-value">
+                2
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="table-panel">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Recent orders
+            </div>
+
+            <button class="btn btn-outline"
+                    onclick="exportOrders()">
+                Export CSV
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Fulfillment</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="ordersTable">
+
+                    <tr>
+                        <td>VB-1048</td>
+                        <td>Maya Santos</td>
+                        <td>Oct 7, 2026</td>
+                        <td>Set A</td>
+                        <td>Pickup</td>
+                        <td>₱680</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge yellow">Preparing</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1047</td>
+                        <td>John Cruz</td>
+                        <td>Oct 7, 2026</td>
+                        <td>Box of 12</td>
+                        <td>Delivery</td>
+                        <td>₱380</td>
+                        <td><span class="badge red">Unpaid</span></td>
+                        <td><span class="badge purple">Confirmed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1046</td>
+                        <td>Leah Reyes</td>
+                        <td>Oct 6, 2026</td>
+                        <td>Set B</td>
+                        <td>Pickup</td>
+                        <td>₱245</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1045</td>
+                        <td>Mark Garcia</td>
+                        <td>Oct 6, 2026</td>
+                        <td>Box of 8</td>
+                        <td>Pickup</td>
+                        <td>₱265</td>
+                        <td><span class="badge green">Paid</span></td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>VB-1044</td>
+                        <td>Anna Flores</td>
+                        <td>Oct 5, 2026</td>
+                        <td>Strawberry</td>
+                        <td>Delivery</td>
+                        <td>₱180</td>
+                        <td><span class="badge red">Unpaid</span></td>
+                        <td><span class="badge yellow">Pending</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SALES & PROFIT
+===================================================== -->
+
+<section id="sales" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Admin Sales & Profit Dashboard
+        </div>
+
+        <h1 class="page-title">
+            The business behind the sweetness.
+        </h1>
+
+        <p class="page-description">
+            A view of orders, sales, costs and profit.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL ORDERS
+            </div>
+            <div class="stat-value">
+                4
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                ITEMS SOLD
+            </div>
+            <div class="stat-value">
+                60
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                TOTAL REVENUE
+            </div>
+            <div class="stat-value">
+                ₱1,720
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                PRODUCT COST
+            </div>
+            <div class="stat-value">
+                ₱830
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                NET PROFIT
+            </div>
+            <div class="stat-value wine">
+                ₱1,060
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="table-panel">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Orders & contribution
+            </div>
+
+            <button class="btn btn-outline"
+                    onclick="exportSales()">
+                Export Summary
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Revenue</th>
+                        <th>Product Cost</th>
+                        <th>Expenses</th>
+                        <th>Profit</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>VB-1048</td>
+                        <td>Maya Santos</td>
+                        <td>₱680</td>
+                        <td>₱290</td>
+                        <td>₱60</td>
+                        <td>₱330</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1047</td>
+                        <td>John Cruz</td>
+                        <td>₱380</td>
+                        <td>₱160</td>
+                        <td>₱40</td>
+                        <td>₱180</td>
+                        <td><span class="badge purple">Confirmed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1046</td>
+                        <td>Leah Reyes</td>
+                        <td>₱245</td>
+                        <td>₱110</td>
+                        <td>₱20</td>
+                        <td>₱115</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>VB-1045</td>
+                        <td>Mark Garcia</td>
+                        <td>₱265</td>
+                        <td>₱120</td>
+                        <td>₱30</td>
+                        <td>₱115</td>
+                        <td><span class="badge green">Completed</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-panel" style="margin-top:18px">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Profit by product
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Cost</th>
+                        <th>Profit / Unit</th>
+                        <th>Units Sold</th>
+                        <th>Total Profit</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Original</td>
+                        <td>₱35</td>
+                        <td>₱20</td>
+                        <td>₱15</td>
+                        <td>20</td>
+                        <td>₱300</td>
+                    </tr>
+
+                    <tr>
+                        <td>Chocolate</td>
+                        <td>₱45</td>
+                        <td>₱25</td>
+                        <td>₱20</td>
+                        <td>10</td>
+                        <td>₱200</td>
+                    </tr>
+
+                    <tr>
+                        <td>Matcha</td>
+                        <td>₱45</td>
+                        <td>₱27</td>
+                        <td>₱18</td>
+                        <td>8</td>
+                        <td>₱144</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ube</td>
+                        <td>₱45</td>
+                        <td>₱24</td>
+                        <td>₱21</td>
+                        <td>10</td>
+                        <td>₱210</td>
+                    </tr>
+
+                    <tr>
+                        <td>Cookies & Cream</td>
+                        <td>₱45</td>
+                        <td>₱26</td>
+                        <td>₱19</td>
+                        <td>7</td>
+                        <td>₱133</td>
+                    </tr>
+
+                    <tr>
+                        <td>Strawberry</td>
+                        <td>₱50</td>
+                        <td>₱28</td>
+                        <td>₱22</td>
+                        <td>5</td>
+                        <td>₱110</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COSTS & EXPENSES
+===================================================== -->
+
+<section id="costs" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Admin Product Costs & Expenses
+        </div>
+
+        <h1 class="page-title">
+            Know the cost of every puff.
+        </h1>
+
+        <p class="page-description">
+            Track product costs, expenses and margins.
+        </p>
+
+    </div>
+
+
+    <div class="cost-layout">
+
+        <div>
+
+            <div class="cost-table">
+
+                <h2 class="panel-title">
+                    Per-piece costs & labor margin
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Selling Price</th>
+                            <th>Ingredient Cost</th>
+                            <th>Labor</th>
+                            <th>Profit</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Original</td>
+                            <td>₱35</td>
+                            <td>₱15</td>
+                            <td>₱5</td>
+                            <td><strong>₱15</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Chocolate</td>
+                            <td>₱45</td>
+                            <td>₱20</td>
+                            <td>₱5</td>
+                            <td><strong>₱20</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Matcha</td>
+                            <td>₱45</td>
+                            <td>₱22</td>
+                            <td>₱5</td>
+                            <td><strong>₱18</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Ube</td>
+                            <td>₱45</td>
+                            <td>₱19</td>
+                            <td>₱5</td>
+                            <td><strong>₱21</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Cookies & Cream</td>
+                            <td>₱45</td>
+                            <td>₱21</td>
+                            <td>₱5</td>
+                            <td><strong>₱19</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Strawberry</td>
+                            <td>₱50</td>
+                            <td>₱23</td>
+                            <td>₱5</td>
+                            <td><strong>₱22</strong></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="cost-table" style="margin-top:18px">
+
+                <h2 class="panel-title">
+                    Original-only box costs
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Box</th>
+                            <th>Selling Price</th>
+                            <th>Estimated Cost</th>
+                            <th>Profit</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Box of 8</td>
+                            <td>₱215</td>
+                            <td>₱160</td>
+                            <td>₱55</td>
+                        </tr>
+
+                        <tr>
+                            <td>Box of 12</td>
+                            <td>₱320</td>
+                            <td>₱240</td>
+                            <td>₱80</td>
+                        </tr>
+
+                        <tr>
+                            <td>Box of 20</td>
+                            <td>₱525</td>
+                            <td>₱400</td>
+                            <td>₱125</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <aside>
+
+            <div class="expense-form">
+
+                <h2 class="panel-title">
+                    Add another expense
+                </h2>
+
+                <div class="field">
+
+                    <label>
+                        Expense name
+                    </label>
+
+                    <input id="expenseName"
+                           placeholder="Example: Packaging">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Amount
+                    </label>
+
+                    <input id="expenseAmount"
+                           type="number"
+                           placeholder="0">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select id="expenseCategory">
+
+                        <option>
+                            Ingredients
+                        </option>
+
+                        <option>
+                            Packaging
+                        </option>
+
+                        <option>
+                            Transportation
+                        </option>
+
+                        <option>
+                            Utilities
+                        </option>
+
+                        <option>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button class="btn btn-primary"
+                        style="width:100%"
+                        onclick="addExpense()">
+
+                    + Add Expense
+
+                </button>
+
+
+                <div class="expense-list"
+                     id="expenseList">
+
+                    <div class="expense-row">
+                        <span>Delivery materials</span>
+                        <strong>₱80</strong>
+                    </div>
+
+                    <div class="expense-row">
+                        <span>Packaging</span>
+                        <strong>₱100</strong>
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin-top:18px;
+                    padding-top:15px;
+                    border-top:2px solid var(--border);
+                    display:flex;
+                    justify-content:space-between;
+                ">
+
+                    <strong>
+                        Total expenses
+                    </strong>
+
+                    <strong class="price"
+                            id="expenseTotal">
+                        ₱180
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     REFERENCE
+===================================================== -->
+
+<section id="reference" class="page">
+
+    <div class="page-header">
+
+        <div class="eyebrow">
+            Victoria Bakery Reference
+        </div>
+
+        <h1 class="page-title">
+            Product & Ordering Information
+        </h1>
+
+    </div>
+
+
+    <div class="reference-gallery">
+
+        <img src="assets/menu.jpg"
+             alt="Menu">
+
+        <img src="assets/pasabuy.jpg"
+             alt="Pasabuy">
+
+    </div>
+
+
+    <div style="margin-top:15px">
+
+        <img src="assets/products.jpg"
+             alt="Products"
+             style="
+                width:100%;
+                max-height:500px;
+                object-fit:cover;
+                border-radius:10px;
+                border:1px solid var(--border);
+             ">
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div class="toast" id="toast">
+    Added to order.
+</div>
+
+
+<script>
+
+/* =====================================================
+   PRODUCT DATA
+===================================================== */
+
+const products = [
+
+    {
+        name:"Original",
+        price:35,
+        description:"Classic vanilla custard cream"
+    },
+
+    {
+        name:"Chocolate",
+        price:45,
+        description:"Rich chocolate cream"
+    },
+
+    {
+        name:"Matcha",
+        price:45,
+        description:"Smooth and earthy matcha cream"
+    },
+
+    {
+        name:"Ube",
+        price:45,
+        description:"Creamy ube halaya filling"
+    },
+
+    {
+        name:"Cookies & Cream",
+        price:45,
+        description:"Creamy vanilla with crushed cookies"
+    },
+
+    {
+        name:"Strawberry",
+        price:50,
+        description:"Sweet and fruity strawberry cream"
+    }
+
+];
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+let cart = [];
+
+let fulfillment = "Pickup";
+
+let paymentMethod = "GCash";
+
+let orderCounter = 1048;
+
+
+/* =====================================================
+   CREATE PRODUCTS
+===================================================== */
+
+function renderProducts(){
+
+    const container =
+        document.getElementById("products");
+
+    container.innerHTML = "";
+
+    products.forEach((product,index)=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "product-card";
+
+        card.innerHTML = `
+
+            <div class="product-photo">
+
+                <img
+                    src="assets/products.jpg"
+                    alt="${product.name}"
+                    style="
+                        object-position:${index * 18}% center;
+                    "
+                >
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div class="product-description">
+                    ${product.description}
+                </div>
+
+                <div class="product-bottom">
+
+                    <span class="price">
+                        ₱${product.price}
+                    </span>
+
+                    <button
+                        class="add-btn"
+                        onclick="addItem('${product.name}',${product.price})">
+
+                        + Add
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   ADD ITEM
+===================================================== */
+
+function addItem(name,price){
+
+    const existing =
+        cart.find(item=>item.name===name);
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+            name:name,
+            price:price,
+            quantity:1
+        });
+
+    }
+
+    updateCart();
+
+    showToast(name+" added to your order.");
+
+}
+
+
+/* =====================================================
+   REMOVE ITEM
+===================================================== */
+
+function removeItem(index){
+
+    cart.splice(index,1);
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   CHANGE QUANTITY
+===================================================== */
+
+function changeQuantity(index,amount){
+
+    cart[index].quantity += amount;
+
+    if(cart[index].quantity<=0){
+
+        cart.splice(index,1);
+
+    }
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   CLEAR CART
+===================================================== */
+
+function clearCart(){
+
+    cart=[];
+
+    updateCart();
+
+    showToast("Order cleared.");
+
+}
+
+
+/* =====================================================
+   SUBTOTAL
+===================================================== */
+
+function getSubtotal(){
+
+    return cart.reduce(
+        (sum,item)=>
+        sum + (item.price * item.quantity),
+        0
+    );
+
+}
+
+
+/* =====================================================
+   PASABUY FEE
+===================================================== */
+
+function getPasabuyFee(){
+
+    let totalItems =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.quantity,
+            0
+        );
+
+    if(totalItems>=20){
+        return 70;
+    }
+
+    if(totalItems>=12){
+        return 60;
+    }
+
+    if(totalItems>=8){
+        return 50;
+    }
+
+    return 0;
+
+}
+
+
+/* =====================================================
+   DELIVERY FEE
+===================================================== */
+
+function getDeliveryFee(){
+
+    if(fulfillment !== "Delivery"){
+        return 0;
+    }
+
+    let totalItems =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.quantity,
+            0
+        );
+
+    if(totalItems>=20){
+        return 0;
+    }
+
+    return 30;
+
+}
+
+
+/* =====================================================
+   GRAND TOTAL
+===================================================== */
+
+function getGrandTotal(){
+
+    return getSubtotal()
+        + getPasabuyFee()
+        + getDeliveryFee();
+
+}
+
+
+/* =====================================================
+   FORMAT PESO
+===================================================== */
+
+function peso(amount){
+
+    return "₱" +
+        Number(amount).toLocaleString(
+            "en-PH"
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE CART
+===================================================== */
+
+function updateCart(){
+
+    const container =
+        document.getElementById("cartItems");
+
+    if(cart.length===0){
+
+        container.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:30px 10px;
+                color:#8b7e82;
+                font-size:11px;
+            ">
+
+                Your order is empty.
+
+            </div>
+
+        `;
+
+    }else{
+
+        container.innerHTML =
+            cart.map((item,index)=>`
+
+                <div class="cart-item">
+
+                    <div class="cart-item-row">
+
+                        <span class="cart-item-name">
+                            ${item.name}
+                        </span>
+
+                        <strong>
+                            ${peso(item.price * item.quantity)}
+                        </strong>
+
+                    </div>
+
+                    <div class="cart-controls">
+
+                        <button
+                            class="qty-btn"
+                            onclick="changeQuantity(${index},-1)">
+                            −
+                        </button>
+
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            class="qty-btn"
+                            onclick="changeQuantity(${index},1)">
+                            +
+                        </button>
+
+                        <button
+                            class="remove-btn"
+                            onclick="removeItem(${index})">
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    const subtotal =
+        getSubtotal();
+
+    const pasabuy =
+        getPasabuyFee();
+
+    const delivery =
+        getDeliveryFee();
+
+    const total =
+        subtotal + pasabuy + delivery;
+
+
+    document.getElementById("subtotal")
+        .textContent = peso(subtotal);
+
+    document.getElementById("pasabuyFee")
+        .textContent = peso(pasabuy);
+
+    document.getElementById("deliveryFee")
+        .textContent = peso(delivery);
+
+    document.getElementById("grandTotal")
+        .textContent = peso(total);
+
+
+    renderCheckout();
+
+}
+
+
+/* =====================================================
+   CHECKOUT SUMMARY
+===================================================== */
+
+function renderCheckout(){
+
+    const container =
+        document.getElementById(
+            "checkoutItems"
+        );
+
+    if(!container) return;
+
+    if(cart.length===0){
+
+        container.innerHTML = `
+            <p style="
+                color:var(--muted);
+                font-size:11px;
+            ">
+                No items in your order.
+            </p>
+        `;
+
+    }else{
+
+        container.innerHTML =
+            cart.map(item=>`
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    padding:9px 0;
+                    border-bottom:1px solid var(--border);
+                    font-size:11px;
+                ">
+
+                    <span>
+                        ${item.name}
+                        × ${item.quantity}
+                    </span>
+
+                    <strong>
+                        ${peso(item.price*item.quantity)}
+                    </strong>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    document.getElementById(
+        "checkoutSubtotal"
+    ).textContent =
+        peso(getSubtotal());
+
+
+    document.getElementById(
+        "checkoutPasabuy"
+    ).textContent =
+        peso(getPasabuyFee());
+
+
+    document.getElementById(
+        "checkoutDelivery"
+    ).textContent =
+        peso(getDeliveryFee());
+
+
+    document.getElementById(
+        "checkoutTotal"
+    ).textContent =
+        peso(getGrandTotal());
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+function goTo(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>{
+            p.classList.remove("active");
+        });
+
+
+    const target =
+        document.getElementById(page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(button=>{
+
+            button.classList.remove("active");
+
+            if(button.dataset.page===page){
+                button.classList.add("active");
+            }
+
+        });
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+
+    if(page==="checkout"){
+        renderCheckout();
+    }
+
+}
+
+
+/* =====================================================
+   NAVIGATION BUTTONS
+===================================================== */
+
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>goTo(button.dataset.page)
+        );
+
+    });
+
+
+/* =====================================================
+   FULFILLMENT
+===================================================== */
+
+function setFulfillment(type){
+
+    fulfillment = type;
+
+
+    document
+        .querySelectorAll(
+            "#pickupChoice,#deliveryChoice,#meetupChoice"
+        )
+        .forEach(el=>{
+            el.classList.remove("active");
+        });
+
+
+    if(type==="Pickup"){
+        document
+            .getElementById("pickupChoice")
+            .classList.add("active");
+    }
+
+    if(type==="Delivery"){
+        document
+            .getElementById("deliveryChoice")
+            .classList.add("active");
+    }
+
+    if(type==="Meetup"){
+        document
+            .getElementById("meetupChoice")
+            .classList.add("active");
+    }
+
+
+    updateCart();
+
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+function selectPayment(element,method){
+
+    paymentMethod=method;
+
+
+    document
+        .querySelectorAll(".choice")
+        .forEach(choice=>{
+
+            if(
+                choice.parentElement.classList.contains(
+                    "choice-grid"
+                )
+            ){
+                choice.classList.remove("active");
+            }
+
+        });
+
+
+    element.classList.add("active");
+
+}
+
+
+/* =====================================================
+   PLACE ORDER
+===================================================== */
+
+function placeOrder(){
+
+    if(cart.length===0){
+
+        showToast(
+            "Please add an item first."
+        );
+
+        goTo("menu");
+
+        return;
+
+    }
+
+
+    const name =
+        document
+        .getElementById("customerName")
+        .value.trim();
+
+
+    const phone =
+        document
+        .getElementById("customerPhone")
+        .value.trim();
+
+
+    if(!name || !phone){
+
+        showToast(
+            "Please enter your name and contact number."
+        );
+
+        return;
+
+    }
+
+
+    orderCounter++;
+
+    const orderNumber =
+        "VB-" + orderCounter;
+
+
+    const order = {
+
+        id:orderNumber,
+
+        customer:name,
+
+        phone:phone,
+
+        address:
+            document
+            .getElementById("customerAddress")
+            .value,
+
+        location:
+            document
+            .getElementById("pickupLocation")
+            .value,
+
+        fulfillment:fulfillment,
+
+        payment:paymentMethod,
+
+        items:[...cart],
+
+        total:getGrandTotal(),
+
+        status:"Preparing",
+
+        date:new Date().toLocaleDateString(
+            "en-PH"
+        )
+
+    };
+
+
+    localStorage.setItem(
+        "victoriaLatestOrder",
+        JSON.stringify(order)
+    );
+
+
+    let storedOrders =
+        JSON.parse(
+            localStorage.getItem(
+                "victoriaOrders"
+            ) || "[]"
+        );
+
+
+    storedOrders.unshift(order);
+
+
+    localStorage.setItem(
+        "victoriaOrders",
+        JSON.stringify(storedOrders)
+    );
+
+
+    document.getElementById(
+        "trackNumber"
+    ).value=orderNumber;
+
+
+    document.getElementById(
+        "trackOrderNumber"
+    ).textContent=orderNumber;
+
+
+    cart=[];
+
+    updateCart();
+
+    showToast(
+        "Order "+orderNumber+" placed successfully!"
+    );
+
+
+    goTo("track");
+
+}
+
+
+/* =====================================================
+   TRACK ORDER
+===================================================== */
+
+function trackOrder(){
+
+    const number =
+        document
+        .getElementById("trackNumber")
+        .value.trim();
+
+
+    if(!number){
+
+        showToast(
+            "Enter an order number."
+        );
+
+        return;
+
+    }
+
+
+    const storedOrders =
+        JSON.parse(
+            localStorage.getItem(
+                "victoriaOrders"
+            ) || "[]"
+        );
+
+
+    const found =
+        storedOrders.find(
+            order=>order.id===number
+        );
+
+
+    document.getElementById(
+        "trackOrderNumber"
+    ).textContent=number;
+
+
+    if(found){
+
+        document.getElementById(
+            "trackStatus"
+        ).textContent=found.status;
+
+        showToast(
+            "Order found."
+        );
+
+    }else{
+
+        showToast(
+            "Showing sample tracking information."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   REFERENCE PAGE
+===================================================== */
+
+function showReference(){
+
+    goTo("reference");
+
+}
+
+
+/* =====================================================
+   EXPENSES
+===================================================== */
+
+let expenseTotal=180;
+
+
+function addExpense(){
+
+    const name =
+        document
+        .getElementById("expenseName")
+        .value.trim();
+
+
+    const amount =
+        Number(
+            document
+            .getElementById("expenseAmount")
+            .value
+        );
+
+
+    if(!name || !amount){
+
+        showToast(
+            "Enter expense name and amount."
+        );
+
+        return;
+
+    }
+
+
+    expenseTotal += amount;
+
+
+    const list =
+        document.getElementById(
+            "expenseList"
+        );
+
+
+    const row =
+        document.createElement("div");
+
+
+    row.className="expense-row";
+
+
+    row.innerHTML=`
+
+        <span>
+            ${name}
+        </span>
+
+        <strong>
+            ${peso(amount)}
+        </strong>
+
+    `;
+
+
+    list.appendChild(row);
+
+
+    document.getElementById(
+        "expenseTotal"
+    ).textContent=
+        peso(expenseTotal);
+
+
+    document.getElementById(
+        "expenseName"
+    ).value="";
+
+
+    document.getElementById(
+        "expenseAmount"
+    ).value="";
+
+
+    showToast(
+        "Expense added."
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT ORDERS
+===================================================== */
+
+function exportOrders(){
+
+    const rows = [
+
+        [
+            "Order",
+            "Customer",
+            "Date",
+            "Items",
+            "Fulfillment",
+            "Total",
+            "Payment",
+            "Status"
+        ],
+
+        [
+            "VB-1048",
+            "Maya Santos",
+            "Oct 7, 2026",
+            "Set A",
+            "Pickup",
+            "680",
+            "Paid",
+            "Preparing"
+        ],
+
+        [
+            "VB-1047",
+            "John Cruz",
+            "Oct 7, 2026",
+            "Box of 12",
+            "Delivery",
+            "380",
+            "Unpaid",
+            "Confirmed"
+        ]
+
+    ];
+
+
+    downloadCSV(
+        rows,
+        "victoria-bakery-orders.csv"
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT SALES
+===================================================== */
+
+function exportSales(){
+
+    const rows=[
+
+        [
+            "Order",
+            "Customer",
+            "Revenue",
+            "Product Cost",
+            "Expenses",
+            "Profit"
+        ],
+
+        [
+            "VB-1048",
+            "Maya Santos",
+            "680",
+            "290",
+            "60",
+            "330"
+        ],
+
+        [
+            "VB-1047",
+            "John Cruz",
+            "380",
+            "160",
+            "40",
+            "180"
+        ],
+
+        [
+            "VB-1046",
+            "Leah Reyes",
+            "245",
+            "110",
+            "20",
+            "115"
+        ]
+
+    ];
+
+
+    downloadCSV(
+        rows,
+        "victoria-bakery-sales.csv"
+    );
+
+}
+
+
+/* =====================================================
+   CSV GENERATOR
+===================================================== */
+
+function downloadCSV(rows,filename){
+
+    const csv =
+        rows
+        .map(row=>
+            row
+            .map(value=>
+                `"${String(value)
+                    .replace(/"/g,'""')}"`
+            )
+            .join(",")
+        )
+        .join("\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:"text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href=url;
+
+    link.download=filename;
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+        setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+        },2500);
+
+}
+
+
+/* =====================================================
+   LOAD SAVED ORDER
+===================================================== */
+
+function loadSavedOrder(){
+
+    const latest =
+        localStorage.getItem(
+            "victoriaLatestOrder"
+        );
+
+
+    if(!latest) return;
+
+
+    try{
+
+        const order =
+            JSON.parse(latest);
+
+
+        if(order.id){
+
+            document.getElementById(
+                "trackNumber"
+            ).value=order.id;
+
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+function setDefaultDate(){
+
+    const date =
+        document.getElementById(
+            "orderDate"
+        );
+
+
+    if(date){
+
+        const today =
+            new Date();
+
+
+        const yyyy =
+            today.getFullYear();
+
+
+        const mm =
+            String(
+                today.getMonth()+1
+            ).padStart(2,"0");
+
+
+        const dd =
+            String(
+                today.getDate()
+            ).padStart(2,"0");
+
+
+        date.value =
+            `${yyyy}-${mm}-${dd}`;
+
+    }
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+renderProducts();
+
+updateCart();
+
+loadSavedOrder();
+
+setDefaultDate();
+
+</script>
+
+</body>
+</html>
